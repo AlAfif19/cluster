@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add .planning/config.json)",
+      "Bash(git commit:*)",
+      "Bash(node \"$HOME/.claude/get-shit-done/bin/gsd-tools.cjs\" config-set workflow.auto_advance true)",
+      "Bash(git add .planning/REQUIREMENTS.md)"
+    ]
+  }
+}

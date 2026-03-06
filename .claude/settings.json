@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Abdurr/.claude/get-shit-done/templates/**)",
+      "Bash(git add .planning/ROADMAP.md)",
+      "Read(//c/Users/Abdurr/**)",
+      "Bash(grep -A 2 \"requirements:\" /c/github/cluster/.planning/phases/01-infrastructure-foundation/*.md)",
+      "Bash(git add .planning/phases/01-infrastructure-foundation/)",
+      "Skill(gsd:execute-phase)",
+      "Skill(gsd:execute-phase:*)",
+      "Bash(git add .env.local docker-compose.yml)",
+      "Bash(git add .planning/phases/01-infrastructure-foundation/01-UAT.md)"
+    ]
+  }
+}
