@@ -8,6 +8,21 @@ KMeans Engine is a web-based SaaS platform that helps companies automatically se
 
 Provide accurate, reliable customer segmentation through automated K-Means clustering with intuitive visualization and clear results.
 
+## Current Milestone: v1.0 MVP
+
+**Goal:** Build complete SaaS platform with user authentication, data pipeline, K-Means clustering, visualization, and security.
+
+**Target features:**
+- User authentication (sign up, login, logout, session management)
+- Dashboard with project list and health indicators
+- Full data pipeline: upload, validate, clean, cluster, visualize, download
+- Data management with isolation and deletion
+- Professional visualizations with interaction
+- Modern, responsive UI design
+- Security features (HTTPS, isolation, validation, right to be forgotten)
+
+**Requirements:** 35 total across 7 categories (AUTH, DASH, PIPE, DATA, VIS, UI, SEC)
+
 ## Requirements
 
 ### Validated
