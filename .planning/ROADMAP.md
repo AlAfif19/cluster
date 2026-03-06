@@ -50,9 +50,10 @@ Plans:
   4. Passwords are stored in database as secure hash (not plain text)
   5. Login sessions automatically expire after configured timeout period
   6. Each user's data is logically isolated from other users in the database
-**Plans**: 6 plans
+**Plans**: 7 plans
 
 Plans:
+- [ ] 02-00: Set up automated test infrastructure with pytest
 - [ ] 02-01: Create user database model with secure password hashing and database connection infrastructure
 - [ ] 02-02: Create user registration API endpoint with email validation and password hashing
 - [ ] 02-03: Create login API endpoint with JWT token generation and session management
@@ -86,12 +87,12 @@ Plans:
 **Depends on**: Phase 3
 **Requirements**: [PIPE-02, PIPE-03, PIPE-04, DATA-01, DATA-02, DATA-03, SEC-03]
 **Success Criteria** (what must be TRUE):
-  1. User can upload Excel (.xlsx) or CSV (UTF-8) files from the data understanding page
+  1. User can upload Excel (.xlsx) or CSV (UTF-8) files from data understanding page
   2. System rejects files exceeding 5,000 rows with clear error message
   3. System validates data types and required fields automatically during upload
   4. User can preview initial data in a table format after successful upload
   5. Progress indicators show "Uploading" and "Processing" status during file processing
-  6. Each user's uploaded data is stored securely and isolated in the database
+  6. Each user's uploaded data is stored securely and isolated in database
   7. Server-side validation prevents bypass of row limit and format restrictions
 **Plans**: TBD
 
@@ -109,8 +110,8 @@ Plans:
 **Depends on**: Phase 4
 **Requirements**: [PIPE-05, PIPE-06, PIPE-07, DATA-04]
 **Success Criteria** (what must be TRUE):
-  1. System automatically detects and displays null values in the dataset
-  2. System automatically detects and displays duplicate rows in the dataset
+  1. System automatically detects and displays null values in dataset
+  2. System automatically detects and displays duplicate rows in dataset
   3. User can choose automatic cleaning option to apply recommended fixes
   4. User can choose manual cleaning option to selectively address issues
   5. System automatically standardizes numerical data (scaling, normalization)
@@ -133,7 +134,7 @@ Plans:
 **Depends on**: Phase 5
 **Requirements**: [PIPE-08, PIPE-09]
 **Success Criteria** (what must be TRUE):
-  1. User can determine and input the number of clusters (K) through a clear interface
+  1. User can determine and input number of clusters (K) through a clear interface
   2. System executes K-Means++ algorithm when user initiates clustering
   3. Real-time progress indicator shows clustering execution progress
   4. User receives clear process status feedback throughout clustering operation
@@ -179,7 +180,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Foundation | 3/3 | Complete | 2026-03-06 |
-| 2. Authentication System | 0/6 | Planned | - |
+| 2. Authentication System | 0/7 | Planned | - |
 | 3. Dashboard & Navigation | 0/6 | Not started | - |
 | 4. Data Upload & Understanding | 0/7 | Not started | - |
 | 5. Data Preparation & Cleaning | 0/8 | Not started | - |
