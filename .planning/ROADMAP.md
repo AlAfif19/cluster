@@ -1,7 +1,6 @@
 # Roadmap: KMeans Engine
 
 ## Overview
-
 KMeans Engine is a web-based SaaS platform for customer segmentation using K-Means clustering. The journey from infrastructure to a complete 5-stage analysis pipeline flows through seven phases: foundation, authentication, dashboard UI, data upload and understanding, data preparation, K-Means modeling, and visualization with export. Each phase delivers a coherent capability that users can experience and verify, building incrementally toward accurate, automated customer segmentation without requiring data science expertise.
 
 ## Phases
@@ -50,16 +49,17 @@ Plans:
   4. Passwords are stored in database as secure hash (not plain text)
   5. Login sessions automatically expire after configured timeout period
   6. Each user's data is logically isolated from other users in the database
-**Plans**: 7 plans
+**Plans**: 8 plans
 
 Plans:
-- [ ] 02-00: Set up automated test infrastructure with pytest
+- [ ] 02-00: Set up automated test infrastructure with pytest and HTTPS enforcement
 - [ ] 02-01: Create user database model with secure password hashing and database connection infrastructure
 - [ ] 02-02: Create user registration API endpoint with email validation and password hashing
 - [ ] 02-03: Create login API endpoint with JWT token generation and session management
 - [ ] 02-04: Create logout API endpoint with token invalidation
 - [ ] 02-05: Create frontend authentication pages and state management (registration, login, logout)
-- [ ] 02-06: Enforce user data isolation and HTTPS security requirements
+- [ ] 02-06: Enforce user data isolation requirements
+- [ ] 02-07: Implement JWT token expiration mechanism for session timeout
 
 ### Phase 3: Dashboard & Navigation
 **Goal**: Build main dashboard UI with navigation and project management
@@ -175,12 +175,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Foundation | 3/3 | Complete | 2026-03-06 |
-| 2. Authentication System | 0/7 | Planned | - |
+| 2. Authentication System | 0/8 | Planned | - |
 | 3. Dashboard & Navigation | 0/6 | Not started | - |
 | 4. Data Upload & Understanding | 0/7 | Not started | - |
 | 5. Data Preparation & Cleaning | 0/8 | Not started | - |
@@ -233,4 +233,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | VIS-02 | 7 | Pending | Visualizations use clean, professional design |
 | VIS-03 | 7 | Pending | User can interact with visualizations to explore cluster results |
 
-**Total v1 Requirements Mapped: 45/45 ✓**
+**Total v1 Requirements Mapped: 45/45**
