@@ -154,6 +154,10 @@ desktop.ini
 !.env.template
 !exported_data/*.xlsx
 
+# Keep sample Excel files in project root
+!exported_data.xlsx
+!exported_data_mutasi.xlsx
+
 # Claude Code
 .claude/current-agent-id.txt
 .claude/cache/
