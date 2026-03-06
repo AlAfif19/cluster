@@ -50,7 +50,6 @@ build/
 
 # Environment and secrets
 .env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -60,6 +59,10 @@ secrets/
 credentials/
 .id_rsa
 *.pem
+
+# Note: .env.local and .env.production are intentionally NOT ignored
+# .env.local contains safe development credentials
+# .env.production contains only ${VAR_NAME} placeholders
 
 # IDE and editors
 .vscode/
