@@ -17,53 +17,72 @@ KMeans Engine is a web-based SaaS platform for customer segmentation using K-Mea
 
 ## v1.0 Requirements
 
-### Must-Have (Phase 1-8)
+### Must-Have (Phase 1-7)
+
+#### Infrastructure
+- [ ] INFRA-01: Docker setup for database
+- [ ] INFRA-02: Docker setup for backend
+- [ ] INFRA-03: Docker setup for frontend
+- [ ] INFRA-04: Docker Compose orchestration
+- [ ] INFRA-05: start.bat script for local development
+- [ ] INFRA-06: Environment configuration (local vs production)
+- [ ] INFRA-07: Git-based version control
 
 #### Authentication System
-- [ ] User registration with email and password
-- [ ] User login with credential verification
-- [ ] Secure session management with automatic expiration
-- [ ] Password hashing (unreadable format)
-- [ ] Logout functionality
+- [ ] AUTH-01: User can create account with email and password
+- [ ] AUTH-02: User can log in and stay logged in across sessions
+- [ ] AUTH-03: User can log out from any page
+- [ ] AUTH-04: Passwords are stored with secure hash encryption
+- [ ] AUTH-05: Login sessions have automatic expiration
 
 #### Main Dashboard
-- [ ] Collapsible sidebar navigation
-- [ ] List of previously created projects
-- [ ] System health indicators
-- [ ] Responsive design (desktop & tablet)
+- [ ] DASH-01: User can view main dashboard with collapsible sidebar
+- [ ] DASH-02: User can see list of previously created projects
+- [ ] DASH-03: User can view system health indicators
+
+#### UI/UX Design
+- [ ] UI-01: Interface uses minimalist modern design with white background and high-contrast text
+- [ ] UI-02: Interface uses Inter font for maximum readability
+- [ ] UI-03: Interface has smooth transitions and responsive animations
+- [ ] UI-04: Interface is responsive for desktop and tablet screens
 
 #### Data Understanding (Stage 2)
-- [ ] File upload (Excel .xlsx, CSV UTF-8)
-- [ ] Server-side validation of file format and row limit (5,000 rows)
-- [ ] Data type validation
-- [ ] Required field validation
-- [ ] Initial data preview
+- [ ] PIPE-02: User can upload customer data files (Excel .xlsx or CSV UTF-8)
+- [ ] PIPE-03: System validates data types and required fields automatically
+- [ ] PIPE-04: User can preview initial data after upload
+- [ ] DATA-01: System validates file size and rejects files exceeding 5,000 rows
+- [ ] DATA-02: System processes and stores customer data securely
+- [ ] DATA-03: System isolates each user's data in database
+- [ ] SEC-03: System validates upload limits server-side
 - [ ] Progress feedback ("Uploading", "Processing")
 
 #### Data Preparation (Stage 3)
-- [ ] Automatic detection of null values
-- [ ] Automatic detection of duplicates
-- [ ] Automatic data cleaning option
-- [ ] Manual data cleaning option
-- [ ] Numerical data standardization
+- [ ] PIPE-05: System detects null values and duplicates
+- [ ] PIPE-06: User can choose automatic or manual data cleaning options
+- [ ] PIPE-07: System standardizes numerical data automatically
+- [ ] DATA-04: User can delete their project data manually
 - [ ] Clear feedback on cleaning actions
 
 #### Modeling (Stage 4)
-- [ ] User interface for determining number of clusters (K)
-- [ ] K-Means++ algorithm execution
+- [ ] PIPE-08: User can determine number of clusters (K)
+- [ ] PIPE-09: System executes K-Means++ algorithm with progress indicator
 - [ ] Real-time progress indicator during clustering
 - [ ] Process status feedback
 
 #### Evaluation & Deployment (Stage 5)
-- [ ] Cluster distribution visualization
-- [ ] Model evaluation metrics display
-- [ ] Download results in Excel format
-- [ ] Download results in CSV format
+- [ ] PIPE-10: User can view cluster distribution visualization
+- [ ] PIPE-11: User can view model evaluation metrics
+- [ ] PIPE-12: User can download results in Excel/CSV format
+
+#### Business Understanding (Stage 1)
+- [ ] PIPE-01: User can access educational page about clustering benefits
+- [ ] Clear explanation of K-Means for businesses
+- [ ] Use case examples
 
 #### Visualization
-- [ ] Convert numerical data to graphs and charts
-- [ ] Clean, professional visualization design
-- [ ] Interactive visualizations for cluster exploration
+- [ ] VIS-01: System converts numerical data into understandable graphs and charts
+- [ ] VIS-02: Visualizations use clean, professional design
+- [ ] VIS-03: User can interact with visualizations to explore cluster results
 - [ ] High contrast, readable charts
 
 #### UI/UX Design
@@ -76,8 +95,8 @@ KMeans Engine is a web-based SaaS platform for customer segmentation using K-Mea
 - [ ] Empty states handled gracefully
 
 #### Security & Privacy
-- [ ] HTTPS in production (HTTP local)
-- [ ] Data isolation per user in database
+- [ ] SEC-01: All communication uses secure protocol (HTTPS in production)
+- [ ] SEC-02: Each user's data is logically isolated from other users
 - [ ] Server-side upload validation
 - [ ] Session token expiration
 - [ ] Database schema supports right to be forgotten
@@ -148,6 +167,55 @@ KMeans Engine is a web-based SaaS platform for customer segmentation using K-Mea
 - System handles 5,000-row datasets reliably
 - Visualizations are clear and interpretable by business users
 
+## Requirements Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-01 | 1 | Pending |
+| INFRA-02 | 1 | Pending |
+| INFRA-03 | 1 | Pending |
+| INFRA-04 | 1 | Pending |
+| INFRA-05 | 1 | Pending |
+| INFRA-06 | 1 | Pending |
+| INFRA-07 | 1 | Pending |
+| AUTH-01 | 2 | Pending |
+| AUTH-02 | 2 | Pending |
+| AUTH-03 | 2 | Pending |
+| AUTH-04 | 2 | Pending |
+| AUTH-05 | 2 | Pending |
+| SEC-01 | 2 | Pending |
+| SEC-02 | 2 | Pending |
+| DASH-01 | 3 | Pending |
+| DASH-02 | 3 | Pending |
+| DASH-03 | 3 | Pending |
+| UI-01 | 3 | Pending |
+| UI-02 | 3 | Pending |
+| UI-03 | 3 | Pending |
+| UI-04 | 3 | Pending |
+| PIPE-01 | 7 | Pending |
+| PIPE-02 | 4 | Pending |
+| PIPE-03 | 4 | Pending |
+| PIPE-04 | 4 | Pending |
+| PIPE-05 | 5 | Pending |
+| PIPE-06 | 5 | Pending |
+| PIPE-07 | 5 | Pending |
+| PIPE-08 | 6 | Pending |
+| PIPE-09 | 6 | Pending |
+| PIPE-10 | 7 | Pending |
+| PIPE-11 | 7 | Pending |
+| PIPE-12 | 7 | Pending |
+| DATA-01 | 4 | Pending |
+| DATA-02 | 4 | Pending |
+| DATA-03 | 4 | Pending |
+| DATA-04 | 5 | Pending |
+| SEC-03 | 4 | Pending |
+| VIS-01 | 7 | Pending |
+| VIS-02 | 7 | Pending |
+| VIS-03 | 7 | Pending |
+
+**Total v1 Requirements: 45**
+**Coverage: 45/45 (100%)**
+
 ---
 *Extracted from PROJECT.md and specification*
-*Last updated: March 4, 2026*
+*Last updated: March 6, 2026*
