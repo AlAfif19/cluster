@@ -1,0 +1,171 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.pyre/
+.pytype/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.ENV/
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg
+.eggs/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+.cache/
+
+# Environment and secrets
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+secrets/
+credentials/
+.id_rsa
+*.pem
+
+# Note: .env.local and .env.production are intentionally NOT ignored
+# .env.local contains safe development credentials
+# .env.production contains only ${VAR_NAME} placeholders
+
+# IDE and editors
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
+desktop.ini
+$RECYCLE.BIN/
+
+# Database and data
+mysql-data/
+*.db
+*.sqlite
+*.sqlite3
+uploads/
+temp/
+*.sql
+*.dump
+
+# Logs and temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.tmp
+*.bak
+*.swp
+.cache/
+.npm/
+
+# Testing
+coverage/
+.nyc_output/
+junit.xml
+test-results/
+.playwright-report/
+playwright-report/
+
+# Package managers
+package-lock.json
+poetry.lock
+poetry.lock
+
+# Documentation builds
+docs/_build/
+site/
+.doctrees/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Docker
+*.log
+
+# Misc
+.vercel/
+.turbo/
+.netlify/
+
+# Keep exceptions
+!.gitkeep
+!.env.example
+!.env.template
+!exported_data/*.xlsx
+
+# Keep sample Excel files in project root
+!exported_data.xlsx
+!exported_data_mutasi.xlsx
+
+# Claude Code
+.claude/current-agent-id.txt
+.claude/cache/
+.claude/temp/
+
+# Test data
+test_data/
+sample_data/
