@@ -89,7 +89,7 @@ def test_token_verification(client, auth_headers):
     assert "email" in data
 
 
-def test_expired_token(client):
+def test_expired_token(client, db_session):
     """Test that expired tokens are rejected."""
     # Create test user
     user = User(
