@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-03-06T23:56:00.000Z"
+last_updated: "2026-03-07T06:51:00.000Z"
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 14
-  completed_plans: 5
+  completed_plans: 6
 current_phase: 02-authentication-system
 current_plan: 02-01
 phase_progress:
@@ -18,6 +18,8 @@ phase_progress:
     total_plans: 6
   - name: 02-authentication-system
     status: in_progress
+    plans_completed: 2
+    total_plans: 8
     plans_completed: 2
     total_plans: 8
 ---
