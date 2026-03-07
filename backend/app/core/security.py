@@ -5,6 +5,9 @@ This module provides JWT token creation, verification, and expiration handling
 for secure authentication in the FastAPI application.
 """
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from jose import JWTError, ExpiredSignatureError, jwt
@@ -107,6 +110,9 @@ def get_password_hash(password: str) -> str:
     """
     return pwd_context.hash(password)
 
+
+# OAuth2 scheme for Bearer token authentication
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 # Create credentials exception for reuse
 credentials_exception = HTTPException(
