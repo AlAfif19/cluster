@@ -10,7 +10,7 @@ progress:
   total_plans: 14
   completed_plans: 6
 current_phase: 02-authentication-system
-current_plan: 02-01
+current_plan: 02-02
 phase_progress:
   - name: 01-infrastructure-foundation
     status: completed
@@ -18,8 +18,6 @@ phase_progress:
     total_plans: 6
   - name: 02-authentication-system
     status: in_progress
-    plans_completed: 2
-    total_plans: 8
     plans_completed: 2
     total_plans: 8
 ---
