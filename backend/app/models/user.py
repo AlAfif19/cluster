@@ -1,42 +1,35 @@
 """
-User model for authentication and account management.
+User SQLAlchemy model with password hashing utilities.
+
+This module defines the User model for the database and provides
+password hashing and verification functions using bcrypt.
 """
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.sql import func
+from sqlalchemy import Column, String, DateTime, Boolean
+from sqlalchemy.dialects.mysql import CHAR as UUID
 from passlib.context import CryptContext
+from datetime import datetime
+import uuid
+
+# Import Base from database
 from backend.app.database import Base
 
-# Password hashing context
+# Create password hashing context with bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-class User(Base):
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-    User model for authentication and user management.
+    Verify a plain password against a hashed password.
 
-    Attributes:
-        id: Primary key
-        email: User's email address (unique)
-        hashed_password: Bcrypt-hashed password
-        full_name: User's full name
-        is_active: Whether the user account is active
-        created_at: Timestamp when user was created
-        updated_at: Timestamp when user was last updated
+    Args:
+        plain_password: The plain text password to verify
+        hashed_password: The bcrypt hashed password to compare against
+
+    Returns:
+        True if passwords match, False otherwise
     """
-
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
-    full_name = Column(String(255), nullable=False)
-    is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
-    def __repr__(self):
-        return f"<User(id={self.id}, email={self.email})>"
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
@@ -44,23 +37,37 @@ def get_password_hash(password: str) -> str:
     Hash a password using bcrypt.
 
     Args:
-        password: Plain text password
+        password: The plain text password to hash
 
     Returns:
-        Hashed password string
+        The bcrypt hashed password
     """
     return pwd_context.hash(password)
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+class User(Base):
     """
-    Verify a plain text password against a hashed password.
+    User model representing a user account in the database.
 
-    Args:
-        plain_password: Plain text password to verify
-        hashed_password: Hashed password to compare against
-
-    Returns:
-        True if password matches, False otherwise
+    Attributes:
+        id: UUID primary key for the user
+        email: Unique email address (indexed for fast lookups)
+        hashed_password: Bcrypt hashed password (never plain text)
+        full_name: User's full name (optional)
+        is_active: Whether the user account is active
+        created_at: Timestamp when user was created
+        updated_at: Timestamp when user was last updated
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    __tablename__ = "users"
+
+    id = Column(UUID(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    hashed_password = Column(String(255), nullable=False)
+    full_name = Column(String(255), nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    def __repr__(self) -> str:
+        """String representation of User for debugging."""
+        return f"<User(id={self.id}, email={self.email}, is_active={self.is_active})>"
