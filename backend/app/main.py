@@ -4,6 +4,8 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 import os
 from dotenv import load_dotenv
 
+from backend.app.core.auth import router
+
 load_dotenv()
 
 app = FastAPI(title="KMeans Engine API")
@@ -40,3 +42,7 @@ def read_root():
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
+
+
+# Include authentication routes
+app.include_router(router)

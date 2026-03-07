@@ -4,6 +4,10 @@ Tests for authentication endpoints (login, logout, protected routes).
 
 import pytest
 from fastapi import status
+from jose import jwt
+from datetime import timedelta, datetime
+from backend.app.core.security import SECRET_KEY, ALGORITHM
+from backend.app.models.user import User, get_password_hash
 
 
 def test_login_success(client, test_user):
@@ -87,5 +91,31 @@ def test_token_verification(client, auth_headers):
 
 def test_expired_token(client):
     """Test that expired tokens are rejected."""
-    # This test will be implemented in Plan 02-07
-    pytest.skip("Expired token testing implemented in Plan 02-07")
+    # Create test user
+    user = User(
+        email="expired@example.com",
+        hashed_password=get_password_hash("testpass123"),
+        full_name="Expired Test User",
+        is_active=True
+    )
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+
+    # Create expired token (expiration in the past)
+    expire = datetime.utcnow() - timedelta(minutes=1)
+    expired_payload = {
+        "sub": user.email,
+        "exp": expire
+    }
+    expired_token = jwt.encode(expired_payload, SECRET_KEY, algorithm=ALGORITHM)
+
+    # Try to access protected route with expired token
+    response = client.get(
+        "/api/v1/auth/me",
+        headers={"Authorization": f"Bearer {expired_token}"}
+    )
+
+    # Should return 401 with expired message
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert "expired" in response.json()["detail"].lower()
