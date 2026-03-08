@@ -111,6 +111,9 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
+# Token blacklist for logout functionality
+token_blacklist = set()
+
 # OAuth2 scheme for Bearer token authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -120,3 +123,52 @@ credentials_exception = HTTPException(
     detail="Could not validate credentials",
     headers={"WWW-Authenticate": "Bearer"},
 )
+
+
+def get_token_signature(token: str) -> str:
+    """
+    Extract token signature for blacklist (first 64 chars of token).
+    Using token prefix as signature is sufficient for v1.
+    """
+    import hashlib
+    return hashlib.sha256(token.encode()).hexdigest()[:64]
+
+
+def invalidate_token(token: str) -> bool:
+    """
+    Add token to blacklist.
+    Returns True if token was successfully invalidated.
+    """
+    try:
+        signature = get_token_signature(token)
+        token_blacklist.add(signature)
+        return True
+    except Exception as e:
+        return False
+
+
+def is_token_blacklisted(token: str) -> bool:
+    """
+    Check if token is in blacklist.
+    Returns True if token is blacklisted (invalid).
+    """
+    try:
+        signature = get_token_signature(token)
+        return signature in token_blacklist
+    except Exception as e:
+        return True  # Treat errors as blacklisted for security
+
+
+def clear_blacklisted_token(token: str) -> bool:
+    """
+    Remove token from blacklist (for testing or manual cleanup).
+    Returns True if token was removed.
+    """
+    try:
+        signature = get_token_signature(token)
+        if signature in token_blacklist:
+            token_blacklist.remove(signature)
+            return True
+        return False
+    except Exception as e:
+        return False
