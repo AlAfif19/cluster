@@ -47,10 +47,9 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[UserSchema])
-def read_users(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
-    """Get list of users (development only)"""
-    users = db.query(User).offset(skip).limit(limit).all()
-    return users
+def read_users(current_user: User = Depends(get_current_active_user)):
+    """Get the current authenticated user."""
+    return [current_user]
 
 
 @router.get("/email/{email}", response_model=UserSchema)
