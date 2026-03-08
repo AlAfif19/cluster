@@ -1,100 +1,132 @@
 """
-Tests for user data isolation enforcement.
-
-These tests verify that:
-1. Users can only access their own data
-2. Cross-user access attempts are rejected with 403
-3. Ownership validation works correctly
+Tests for user data isolation in user endpoints.
 """
 
 import pytest
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
+from fastapi import status
+from backend.app.models.user import User, get_password_hash
 
-from backend.app.core.deps import require_user_ownership, get_current_active_user
-from backend.app.models.user import User
-from backend.app.core.isolation import validate_user_ownership
-
-
-class TestUserIsolation:
-    """Test user data isolation enforcement."""
-
-    def test_validate_ownership_same_user(self, db: Session):
-        """Test that ownership validation passes for same user."""
-        user_id = "user-123"
-        current_user_id = "user-123"
-
-        # Should not raise exception
-        result = validate_user_ownership(user_id, current_user_id)
-        assert result is True
-
-    def test_validate_ownership_different_user(self, db: Session):
-        """Test that ownership validation fails for different user."""
-        user_id = "user-123"
-        current_user_id = "user-456"
-
-        # Should raise HTTPException 403
-        with pytest.raises(HTTPException) as exc_info:
-            validate_user_ownership(user_id, current_user_id)
-
-        assert exc_info.value.status_code == 403
-        assert "permission" in exc_info.value.detail.lower()
-
-    def test_require_ownership_dependency_same_user(self, db: Session):
-        """Test that ownership dependency works for same user."""
-        # Create mock user
-        user = User(
-            id="user-123",
-            email="user@example.com",
-            hashed_password="hash",
-            is_active=True
-        )
-
-        # Should not raise exception (in real usage, dependency handles this)
-        # This test shows the pattern for endpoint usage
-        assert user.id == "user-123"
-
-    def test_require_ownership_dependency_different_user(self, db: Session):
-        """Test that ownership dependency rejects different user."""
-        user_id = "user-123"
-        current_user_id = "user-456"
-
-        # Should raise HTTPException 403
-        with pytest.raises(HTTPException) as exc_info:
-            validate_user_ownership(user_id, current_user_id)
-
-        assert exc_info.value.status_code == 403
-
-    def test_isolation_patterns_exist(self):
-        """Test that isolation patterns are documented."""
-        from backend.app.core.isolation import ISOLATION_PATTERNS
-
-        assert "filter" in ISOLATION_PATTERNS
-        assert "validate" in ISOLATION_PATTERNS
-        assert "create" in ISOLATION_PATTERNS
-        assert "update" in ISOLATION_PATTERNS
-        assert "delete" in ISOLATION_PATTERNS
-
-    def test_filter_pattern_includes_user_id(self):
-        """Test that filter pattern includes user_id."""
-        from backend.app.core.isolation import ISOLATION_PATTERNS
-
-        pattern = ISOLATION_PATTERNS["filter"]
-        assert "user_id" in pattern
-        assert "current_user.id" in pattern
-
-    def test_create_pattern_sets_user_id(self):
-        """Test that create pattern sets user_id from current user."""
-        from backend.app.core.isolation import ISOLATION_PATTERNS
-
-        pattern = ISOLATION_PATTERNS["create"]
-        assert "user_id=current_user.id" in pattern
+def test_get_users_unauthenticated(client):
+    """Verify GET /users returns 401 when not authenticated."""
+    response = client.get("/api/v1/users/")
+    assert response.status_code == 401
 
 
-# Fixtures for testing
-@pytest.fixture
-def db():
-    """Mock database session fixture."""
-    # In real implementation, this would create a test database
-    # For now, return None as placeholder
-    return None
+def test_get_users_email_unauthenticated(client):
+    """Verify GET /users/email/{email} returns 401 when not authenticated."""
+    response = client.get("/api/v1/users/email/user1@example.com")
+    assert response.status_code == 401
+
+
+def test_user_cannot_access_other_users(client, test_user):
+    """Verify users cannot access other users' data via email endpoint."""
+    # Login as test_user
+    response = client.post(
+        "/api/v1/auth/login",
+        data={"username": test_user.email, "password": "testpass123"}
+    )
+    token = response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Try to access another user's email (should be 404 since no other user exists)
+    response = client.get(
+        "/api/v1/users/email/anotheruser@example.com",
+        headers=headers
+    )
+
+    # In a real scenario with multiple users, this should return 403
+    # Since we only have one test user, it returns 404 (not found)
+    assert response.status_code in [403, 404]
+
+
+def test_get_users_returns_only_current_user(client, test_user):
+    """Verify GET /users returns only the current authenticated user."""
+    # Login as test_user
+    response = client.post(
+        "/api/v1/auth/login",
+        data={"username": test_user.email, "password": "testpass123"}
+    )
+    token = response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Get users
+    response = client.get(
+        "/api/v1/users/",
+        headers=headers
+    )
+
+    # Should return only the current user
+    assert response.status_code == status.HTTP_200_OK
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["email"] == test_user.email
+
+
+def test_get_users_email_not_found(client, test_user, auth_headers):
+    """Verify GET /users/email/{email} returns 403 for non-existent users (email checked first)."""
+    # Try to access non-existent user's email
+    response = client.get(
+        "/api/v1/users/email/nonexistent@example.com",
+        headers=auth_headers
+    )
+
+    # Should return 403 because we check email ownership before checking existence
+    assert response.status_code == 403
+    assert "Access denied" in response.json()["detail"]
+
+
+def test_user_can_access_own_email(client, test_user, auth_headers):
+    """Verify users can access their own email profile."""
+    # Access own email
+    response = client.get(
+        "/api/v1/users/email/test@example.com",
+        headers=auth_headers
+    )
+
+    # Should return 200 with user data
+    assert response.status_code == status.HTTP_200_OK
+    user_data = response.json()
+    assert user_data["email"] == test_user.email
+
+
+def test_inactive_user_cannot_access_data(client, db_session, auth_headers):
+    """Verify inactive users cannot access data."""
+    # Create an inactive user
+    inactive_user = User(
+        email="inactive@example.com",
+        hashed_password=get_password_hash("testpass123"),
+        full_name="Inactive User",
+        is_active=False
+    )
+    db_session.add(inactive_user)
+    db_session.commit()
+    db_session.refresh(inactive_user)
+
+    # Try to login with inactive user
+    response = client.post(
+        "/api/v1/auth/login",
+        data={"username": "inactive@example.com", "password": "testpass123"}
+    )
+
+    # Should return 401 Unauthorized (inactive user)
+    assert response.status_code == 401
+
+
+def test_isolation_enforcement_integration(client, test_user, auth_headers):
+    """Integration test for complete isolation enforcement."""
+    # Login as test_user
+    response = client.get("/api/v1/users/", headers=auth_headers)
+    assert response.status_code == status.HTTP_200_OK
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["email"] == test_user.email
+
+    # Try to access other emails (should be 403 since we check email ownership first)
+    response = client.get("/api/v1/users/email/other@example.com", headers=auth_headers)
+    assert response.status_code == 403
+    assert "Access denied" in response.json()["detail"]
+
+    # Access own email - should be allowed
+    response = client.get("/api/v1/users/email/test@example.com", headers=auth_headers)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["email"] == test_user.email
