@@ -4,7 +4,7 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 import os
 from dotenv import load_dotenv
 
-from backend.app.core.auth import router
+from backend.app.api.v1.api import api_router
 
 load_dotenv()
 
@@ -44,5 +44,5 @@ def health_check():
     return {"status": "healthy"}
 
 
-# Include authentication routes
-app.include_router(router)
+# Include v1 API routes
+app.include_router(api_router, prefix="/api/v1")
