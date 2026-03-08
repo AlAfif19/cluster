@@ -103,6 +103,30 @@ temp/
 *.dump
 
 # Logs and temp
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# MySQL data
+mysql-data/
+*.sock
+
+# Node modules (if applicable)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -169,3 +193,7 @@ desktop.ini
 # Test data
 test_data/
 sample_data/
+
+# Build outputs
+dist/
+build/
