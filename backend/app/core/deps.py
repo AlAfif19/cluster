@@ -25,10 +25,18 @@ ownership_exception = HTTPException(
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     """
-    Verify JWT token and return current user.
+    Verify JWT token, check blacklist, and return current user.
     """
     # Verify token and extract email
     email = verify_token(token, credentials_exception)
+
+    # Check if token is blacklisted (logged out)
+    if is_token_blacklisted(token):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has been invalidated (user logged out)",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     # Query user from database
     user = db.query(User).filter(User.email == email).first()
@@ -53,6 +61,10 @@ def get_current_user_optional(token: str = Depends(oauth2_scheme), db: Session =
     Returns None instead of raising exception for optional auth.
     """
     try:
+        # Check if token is blacklisted first
+        if is_token_blacklisted(token):
+            return None
+
         email = verify_token(token, credentials_exception)
         user = db.query(User).filter(User.email == email).first()
         return user if user else None
