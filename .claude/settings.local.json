@@ -4,7 +4,19 @@
       "Bash(git add .planning/config.json)",
       "Bash(git commit:*)",
       "Bash(node \"$HOME/.claude/get-shit-done/bin/gsd-tools.cjs\" config-set workflow.auto_advance true)",
-      "Bash(git add .planning/REQUIREMENTS.md)"
+      "Bash(git add .planning/REQUIREMENTS.md)",
+      "Bash(python -m pytest backend/tests/test_auth.py backend/tests/test_logout_functionality.py -v --tb=short)",
+      "Bash(test -f C:/github/cluster/docs/SECURITY.md)",
+      "Bash(git add frontend/app/auth/login/page.tsx)",
+      "Bash(git add docs/SECURITY.md)",
+      "Bash(git add backend/tests/test_logout_functionality.py)",
+      "Bash(git add frontend/app/layout.tsx frontend/components/Navigation.tsx frontend/app/dashboard/page.tsx)",
+      "Bash(node \"$HOME/.claude/get-shit-done/bin/gsd-tools.cjs\" requirements mark-complete AUTH-01 AUTH-02 AUTH-03 AUTH-04 AUTH-05)",
+      "Bash(echo \"PLAN EXECUTION COMPLETE: 02-04 Logout Functionality:*)",
+      "Bash(node \"$HOME/.claude/get-shit-done/bin/gsd-tools.cjs\" state record-session --stopped-at \"Completed 02-05-PLAN.md\")",
+      "Bash(git add .planning/phases/02-authentication-system/02-06-SUMMARY.md .planning/STATE.md)",
+      "Bash(git add .planning/phases/02-authentication-system/02-05-SUMMARY.md .planning/STATE.md .planning/ROADMAP.md .planning/REQUIREMENTS.md)",
+      "Bash(python -m pytest backend/tests/test_user_isolation.py -q --tb=short)"
     ]
   }
 }
