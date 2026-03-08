@@ -24,12 +24,13 @@ SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here-must-be-changed")
 ALGORITHM = "HS256"
 
 
-def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(data: Dict[str, Any], user_id: str = None, expires_delta: Optional[timedelta] = None) -> str:
     """
-    Create JWT access token with expiration.
+    Create JWT access token with expiration and user_id.
 
     Args:
         data: Data to encode in the token (typically user info)
+        user_id: Optional user ID to include in token for efficient filtering
         expires_delta: Optional custom expiration time
 
     Returns:
@@ -44,6 +45,10 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     to_encode.update({"exp": expire})
+
+    # Add user_id if provided
+    if user_id:
+        to_encode.update({"user_id": user_id})
 
     # Encode token
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

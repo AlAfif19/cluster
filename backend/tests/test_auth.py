@@ -119,3 +119,54 @@ def test_expired_token(client, db_session):
     # Should return 401 with expired message
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
     assert "expired" in response.json()["detail"].lower()
+
+
+def test_token_includes_user_id(client, db_session):
+    """Verify that login tokens include user_id claim."""
+    # Create test user
+    user = User(
+        email="tokenuser@example.com",
+        hashed_password=get_password_hash("testpass123"),
+        full_name="Token Test User",
+        is_active=True
+    )
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+
+    # Login
+    response = client.post(
+        "/api/v1/auth/login",
+        data={"username": "tokenuser@example.com", "password": "testpass123"}
+    )
+
+    assert response.status_code == 200
+    token = response.json()["access_token"]
+
+    # Decode token and check for user_id
+    from jose import jwt
+    from backend.app.core.security import SECRET_KEY, ALGORITHM
+    payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+
+    assert "user_id" in payload
+    assert payload["user_id"] == str(user.id)
+    assert payload["sub"] == user.email
+
+
+def test_get_user_id_from_token(client, db_session):
+    """Verify get_user_id_from_token extracts user_id correctly."""
+    from jose import jwt
+    from backend.app.core.security import SECRET_KEY, ALGORITHM, create_access_token
+    from backend.app.core.deps import get_user_id_from_token, credentials_exception
+
+    # Create token with user_id
+    test_user_id = "test-user-123"
+    token = create_access_token(
+        data={"sub": "test@example.com"},
+        user_id=test_user_id
+    )
+
+    # Extract user_id
+    extracted_id = get_user_id_from_token(token, credentials_exception)
+
+    assert extracted_id == test_user_id

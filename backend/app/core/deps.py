@@ -7,7 +7,8 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.app.database import get_db
 from backend.app.models.user import User
-from backend.app.core.security import verify_token, oauth2_scheme, is_token_blacklisted
+from backend.app.core.security import verify_token, oauth2_scheme, is_token_blacklisted, SECRET_KEY, ALGORITHM
+from jose import JWTError, jwt
 
 # Credentials exception for unauthorized access
 credentials_exception = HTTPException(
@@ -96,29 +97,34 @@ def optional_user_ownership(user_id: str, current_user: User = Depends(get_curre
     return current_user
 
 
-def get_user_id_from_token(token: str = Depends(oauth2_scheme)) -> str:
+def get_user_id_from_token(
+    token: str,
+    credentials_exception: HTTPException
+) -> str:
     """
     Extract user_id from JWT token without database lookup.
-    Useful for filtering queries by user_id.
-    Raises 401 if token is invalid or blacklisted.
+    Returns user_id if present, otherwise raises credentials_exception.
     """
-    email = verify_token(token, credentials_exception)
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("user_id")
 
-    # Check blacklist
-    if is_token_blacklisted(token):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has been invalidated (user logged out)",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        if user_id is None:
+            # Fallback to email lookup for backward compatibility
+            email: str = payload.get("sub")
+            if email is None:
+                raise credentials_exception
+            # Note: This requires a DB lookup - consider migrating all tokens
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token must include user_id",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
-    # Note: We can't get user_id from token without DB lookup in current implementation
-    # This helper is for future enhancement when user_id is included in JWT
-    # For now, this function is a placeholder
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="User ID extraction from token not yet implemented"
-    )
+        return str(user_id)
+
+    except JWTError:
+        raise credentials_exception
 
 
 __all__ = [
@@ -127,4 +133,5 @@ __all__ = [
     "get_current_user_optional",
     "require_user_ownership",
     "optional_user_ownership",
+    "get_user_id_from_token",
 ]
