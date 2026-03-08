@@ -53,11 +53,23 @@ def read_users(current_user: User = Depends(get_current_active_user)):
 
 
 @router.get("/email/{email}", response_model=UserSchema)
-def get_user_by_email(email: str, db: Session = Depends(get_db)):
-    """Get user by email address"""
+def get_user_by_email(
+    email: str,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """Get user by email (only allows access to own email)"""
+    # User can only access their own email
+    if current_user.email != email:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: You can only access your own profile"
+        )
+
     user = db.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
     return user
 
 
