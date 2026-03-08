@@ -49,7 +49,7 @@ Plans:
   4. Passwords are stored in database as secure hash (not plain text)
   5. Login sessions automatically expire after configured timeout period
   6. Each user's data is logically isolated from other users in the database
-**Plans**: 8 plans
+**Plans**: 10 plans (including 2 gap closure plans)
 
 Plans:
 - [x] 02-00: Set up automated test infrastructure with pytest and HTTPS enforcement
@@ -58,8 +58,10 @@ Plans:
 - [x] 02-03: Create login API endpoint with JWT token generation and session management
 - [x] 02-04: Create logout API endpoint with token invalidation
 - [x] 02-05: Create frontend authentication pages and state management (registration, login, logout)
-- [~] 02-06: Enforce user data isolation requirements (Patterns documented, not enforced in endpoints - SEC-02 gap)
+- [x] 02-06: Enforce user data isolation requirements (Patterns documented, completed via gap closure plans)
 - [x] 02-07: Implement JWT token expiration mechanism for session timeout
+- [x] 02-08: Apply isolation patterns to user endpoints (Gap closure: SEC-02)
+- [x] 02-09: Include user_id in JWT tokens (Gap closure: Performance optimization)
 
 ### Phase 3: Dashboard & Navigation
 **Goal**: Build main dashboard UI with navigation and project management

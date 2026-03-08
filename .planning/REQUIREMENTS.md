@@ -184,7 +184,7 @@ KMeans Engine is a web-based SaaS platform for customer segmentation using K-Mea
 | AUTH-04 | 2 | Complete |
 | AUTH-05 | 2 | Complete |
 | SEC-01 | 2 | Complete |
-| SEC-02 | 2 | Pending |
+| SEC-02 | 2 | Complete |
 | DASH-01 | 3 | Pending |
 | DASH-02 | 3 | Pending |
 | DASH-03 | 3 | Pending |

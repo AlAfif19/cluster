@@ -9,7 +9,11 @@
       "Skill(gsd:execute-phase)",
       "Skill(gsd:execute-phase:*)",
       "Bash(git add .env.local docker-compose.yml)",
-      "Bash(git add .planning/phases/01-infrastructure-foundation/01-UAT.md)"
+      "Bash(git add .planning/phases/01-infrastructure-foundation/01-UAT.md)",
+      "Bash(python -c \":*)",
+      "Bash(python -m pytest backend/tests/test_users.py -v --tb=short)",
+      "Bash(python -m pytest backend/tests/test_auth.py::test_expired_token -v --tb=short)",
+      "Bash(python -c \"from backend.app.main import app; print\\(''✓ FastAPI app loads successfully''\\)\")"
     ]
   }
 }
