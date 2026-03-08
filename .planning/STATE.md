@@ -8,7 +8,7 @@ progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 14
-  completed_plans: 8
+  completed_plans: 9
 current_phase: 02-authentication-system
 current_plan: 02-03
 phase_progress:
@@ -18,7 +18,7 @@ phase_progress:
     total_plans: 6
   - name: 02-authentication-system
     status: in_progress
-    plans_completed: 4
+    plans_completed: 5
     total_plans: 8
 ---
 
